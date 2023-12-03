@@ -1,21 +1,30 @@
-import { StyleSheet, Text, View, FlatList, Button } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  Button,
+  TouchableOpacity,
+} from "react-native";
 import React from "react";
 import { useBlog } from "../context/BlogContext";
 import { Entypo } from "@expo/vector-icons";
 
 export default function HomeScren() {
-  const { blogPosts, addBlogPost } = useBlog();
+  const { blogPosts, addBlogPost, deleteBlogPost } = useBlog();
   return (
     <View>
       <Button title="Add" onPress={addBlogPost} />
       <FlatList
         data={blogPosts}
-        keyExtractor={(post) => post.title}
+        keyExtractor={(post) => post.id.toString()}
         renderItem={({ item }) => {
           return (
             <View style={styles.row}>
               <Text style={styles.title}>{item.title}</Text>
-              <Entypo name="trash" size={24} color="black" />
+              <TouchableOpacity onPress={() => deleteBlogPost(item.id)}>
+                <Entypo name="trash" size={24} color="black" />
+              </TouchableOpacity>
             </View>
           );
         }}
