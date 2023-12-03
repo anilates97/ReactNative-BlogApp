@@ -1,4 +1,10 @@
-import { createContext, useContext, PropsWithChildren, useState } from "react";
+import {
+  createContext,
+  useContext,
+  PropsWithChildren,
+  useState,
+  useReducer,
+} from "react";
 
 type Posts = {
   title: string;
@@ -14,17 +20,40 @@ export const BlogContext = createContext<BlogContextType | undefined>(
 );
 
 export function BlogProvider({ children }: PropsWithChildren<{}>) {
-  const [blogPosts, setBlogPosts] = useState([
+  // const [blogPosts, setBlogPosts] = useState([
+  //   {
+  //     title: "React Native",
+  //   },
+  //   {
+  //     title: "React",
+  //   },
+  // ]);
+
+  type ACTION_TYPE = { type: "add_blogpost"; payload: "Angular" };
+
+  const initialState = [
     {
       title: "React Native",
     },
     {
-      title: "React",
+      title: "React ",
     },
-  ]);
+  ];
+
+  const blogReducer = (state: typeof initialState, action: ACTION_TYPE) => {
+    switch (action.type) {
+      case "add_blogpost":
+        return [...state, { title: "Angular" }];
+      default:
+        return state;
+    }
+  };
+
+  const [blogPosts, dispatch] = useReducer(blogReducer, initialState);
 
   const addBlogPost = () => {
-    setBlogPosts([...blogPosts, { title: "Typescript" }]);
+    //setBlogPosts([...blogPosts, { title: "Typescript" }]);
+    dispatch({ type: "add_blogpost", payload: "Angular" });
   };
 
   return (
